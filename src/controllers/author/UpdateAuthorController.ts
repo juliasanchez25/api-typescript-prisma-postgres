@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { BookRepository } from "../repositories/BookRepository";
+import { AuthorRepository } from "../../repositories/author/AuthorRepository";
 
-export class UpdateBookController {
+export class UpdateAuthorController {
   async handle(req: Request, res: Response) {
     const id = req.params.id;
     const body = req.body;
@@ -12,17 +12,17 @@ export class UpdateBookController {
       });
     }
 
-    const bookRepository = new BookRepository();
+    const authorRepository = new AuthorRepository();
 
     try {
-      const book = await bookRepository.updateBook({
+      const author = await authorRepository.updateAuthor({
         id: parseInt(id),
         ...body,
       });
-      return res.status(200).json(book);
+      return res.status(200).json(author);
     } catch (err) {
       return res.status(404).json({
-        message: "Book not found",
+        message: "Author not found",
       });
     }
   }

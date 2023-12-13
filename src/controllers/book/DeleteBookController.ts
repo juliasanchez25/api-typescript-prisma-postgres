@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { BookRepository } from "../repositories/BookRepository";
+import { DeleteBookUseCase } from "../../use-case/book/delete-book-use-case/DeleteBookUseCase";
 
 export class DeleteBookController {
+  constructor(private deleteBookUseCase: DeleteBookUseCase) {}
+
   async handle(req: Request, res: Response) {
     const id = req.params.id;
 
@@ -11,10 +13,8 @@ export class DeleteBookController {
       });
     }
 
-    const bookRepository = new BookRepository();
-
     try {
-      await bookRepository.deleteBook({ id: parseInt(id) });
+      await this.deleteBookUseCase.execute({ id: parseInt(id) });
       return res.status(200).json({
         message: "Book deleted successfully",
       });
