@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { BookRepository } from "../../repositories/book/BookRepository";
+import { UpdateBookUseCase } from "src/use-case/book/update-book-use-case/UpdateBookUseCase";
 
 export class UpdateBookController {
+  constructor(private updateBookUseCase: UpdateBookUseCase) {}
+
   async handle(req: Request, res: Response) {
     const id = req.params.id;
     const body = req.body;
@@ -12,10 +14,8 @@ export class UpdateBookController {
       });
     }
 
-    const bookRepository = new BookRepository();
-
     try {
-      const book = await bookRepository.updateBook({
+      const book = await this.updateBookUseCase.execute({
         id: parseInt(id),
         ...body,
       });

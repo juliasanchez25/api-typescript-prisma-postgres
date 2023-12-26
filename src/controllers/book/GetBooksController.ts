@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { BookRepository } from "../../repositories/book/BookRepository";
+import { GetBooksUseCase } from "../../use-case/book/get-books-use-case/GetBooksUseCase";
 
 export class GetBooksController {
+  constructor(private readonly getBooksUseCase: GetBooksUseCase) {}
+
   async handle(req: Request, res: Response) {
-    const bookRepository = new BookRepository();
-    const books = await bookRepository.getBooks();
-    res.status(200).json(books);
+    const books = await this.getBooksUseCase.execute();
+    return res.status(200).json(books);
   }
 }

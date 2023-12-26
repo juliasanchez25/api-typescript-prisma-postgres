@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AuthorRepository } from "../../repositories/author/AuthorRepository";
-
+import { GetAuthorsUseCase } from "../../use-case/author/get-authors-use-case/GetAuthorsUseCase";
 export class GetAuthorsController {
+  constructor(private readonly getAuthorsUseCase: GetAuthorsUseCase) {}
+
   async handle(req: Request, res: Response) {
-    const authorRepository = new AuthorRepository();
-    const authors = await authorRepository.getAuthors();
+    const authors = await this.getAuthorsUseCase.execute();
     res.status(200).json(authors);
   }
 }

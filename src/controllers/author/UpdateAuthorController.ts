@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { AuthorRepository } from "../../repositories/author/AuthorRepository";
+import { UpdateAuthorUseCase } from "../../use-case/author/update-author-use-case/UpdateAuthorUseCase";
 
 export class UpdateAuthorController {
+  constructor(private updateAuthorUseCase: UpdateAuthorUseCase) {}
+
   async handle(req: Request, res: Response) {
     const id = req.params.id;
     const body = req.body;
@@ -12,10 +14,8 @@ export class UpdateAuthorController {
       });
     }
 
-    const authorRepository = new AuthorRepository();
-
     try {
-      const author = await authorRepository.updateAuthor({
+      const author = await this.updateAuthorUseCase.execute({
         id: parseInt(id),
         ...body,
       });

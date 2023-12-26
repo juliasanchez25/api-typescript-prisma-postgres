@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { AuthorRepository } from "../../repositories/author/AuthorRepository";
+import { DeleteAuthorUseCase } from "./../../use-case/author/delete-author-use-case/DeleteAuthorUseCase";
 
 export class DeleteAuthorController {
+  constructor(private deleteAuthorUseCase: DeleteAuthorUseCase) {}
+
   async handle(req: Request, res: Response) {
     const id = req.params.id;
 
@@ -11,10 +13,8 @@ export class DeleteAuthorController {
       });
     }
 
-    const authorRepository = new AuthorRepository();
-
     try {
-      await authorRepository.deleteAuthor({ id: parseInt(id) });
+      await this.deleteAuthorUseCase.execute({ id: parseInt(id) });
       return res.status(200).json({
         message: "Author deleted successfully",
       });
