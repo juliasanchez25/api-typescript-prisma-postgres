@@ -4,6 +4,7 @@ import { CreateAuthorParams } from "./dtos/CreateAuthorParams";
 import { UpdateAuthorParams } from "./dtos/UpdateAuthorParams";
 import { GetAuthorParams } from "./dtos/GetAuthorParams";
 import { DeleteAuthorParams } from "./dtos/DeleteAuthorParams";
+import { GetAuthorsParams } from "./dtos/GetAuthorsParams";
 
 const prisma = new PrismaClient();
 
@@ -34,8 +35,17 @@ export class AuthorRepository implements IAuthorRepository {
     });
   };
 
-  getAuthors = async () => {
-    return prisma.author.findMany();
+  getAuthors = async ({ name, email }: GetAuthorsParams) => {
+    return prisma.author.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+        email: {
+          contains: email,
+        },
+      },
+    });
   };
 
   deleteAuthor = async ({ id }: DeleteAuthorParams) => {

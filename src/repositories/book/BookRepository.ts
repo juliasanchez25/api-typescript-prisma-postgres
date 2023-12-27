@@ -4,6 +4,7 @@ import { CreateBookParams } from "./dtos/CreateBookParams";
 import { UpdateBookParams } from "./dtos/UpdateBookParams";
 import { GetBookParams } from "./dtos/GetBookParams";
 import { DeleteBookParams } from "./dtos/DeleteBookParams";
+import { GetBooksParams } from "./dtos/GetBooksParams";
 
 const prisma = new PrismaClient();
 
@@ -35,8 +36,20 @@ export class BookRepository implements IBookRepository {
     });
   };
 
-  getBooks = async () => {
-    return prisma.book.findMany();
+  getBooks = async ({ title, description, genre }: GetBooksParams) => {
+    return prisma.book.findMany({
+      where: {
+        title: {
+          contains: title,
+        },
+        description: {
+          contains: description,
+        },
+        genre: {
+          contains: genre,
+        },
+      },
+    });
   };
 
   deleteBook = async ({ id }: DeleteBookParams) => {
